@@ -1,14 +1,16 @@
 <?php
 $operation = $_REQUEST['operation'];
 $current_dir = __DIR__ . $_REQUEST['current_dir'];
+$fileName = $_REQUEST['filename'];
+$content = explode('=',$_REQUEST['content']);
 
 switch ($operation) {
     case 'list':
         return loadList($current_dir);
-
-    case 'open':
-        echo 'sdasdasd';
-        break;
+    case 'output':
+        return editWord($current_dir, $fileName);
+    case 'write':
+        return writeWord($current_dir, $fileName, $content[1]);
 }
 
 function loadList($current_dirrectory)
@@ -27,11 +29,31 @@ function loadList($current_dirrectory)
             echo "</div>
         <div class='col-3'>я</div>
         <div class='col-3'>" . date('d M. Y г.', filemtime($current_dirrectory . "/" . $item)) . "</div>
-        <div class='col-3'>" . filesize($current_dirrectory . "/" . $item) . "</div>
+        <div class='col-3'>" . number_format(filesize($current_dirrectory . "/" . $item) / 1024, 0). " kb" . "</div>
     </div>";
         }
 
     }
+}
+
+function editWord($current_dirrectory, $fileName)
+{
+    $massive = array_diff(scandir($current_dirrectory), ['.', '..']);
+    $content = file_get_contents($current_dirrectory . '/' . $fileName);
+    echo iconv("WINDOWS-1251", "UTF-8", "$content");
+/*    mb_convert_encoding($content,'UTF-8');*/
+    /*if(explode('.',$fileName)[1] == 'txt') {
+
+    }else{
+        echo htmlspecialchars($content,ENT_QUOTES);
+    }*/
+}
+
+function writeWord($current_dirrectory, $fileName, $content)
+{
+    file_put_contents($current_dirrectory . '/' . $fileName, iconv("WINDOWS-1251", "UTF-8", $content));
+
+    echo 'success';
 }
 
 ?>

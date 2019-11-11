@@ -23,6 +23,9 @@
 .breadcrumb-item span{
     cursor: pointer;
 }
+textarea{
+    height: 50vh;
+}
 a{
     text-decoration: none !important;
 }
@@ -39,11 +42,14 @@ thead th {
     position: sticky;
     top: 0;
 }
-
+.click{
+    background-color: #cefffd;
+}
 #head > div, .inner > div {
     padding: .75rem 0 .75rem 0;
     vertical-align: top;
     width: 100%;
     margin-bottom: 0;
 }
+
 
