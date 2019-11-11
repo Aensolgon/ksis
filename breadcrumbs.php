@@ -8,7 +8,7 @@ foreach (explode('/', $current_dir) as $k => $item) {
         /*$number++;
         setcookie("path_dir[$number]", $item, time() + 3600);*/
         echo ($i == $k) ? "<li class=\"breadcrumb-item active\" aria-current=\"page\">" . ucfirst($item) . "</li>" :
-            "<li class=\"breadcrumb-item\" aria-current=\"page\"><a href=\"#\">" . ucfirst($item) . "</a></li>";
+            "<li class=\"breadcrumb-item\" aria-current=\"page\" data-name='$item' data-number='$k'><span>" . ucfirst($item) ."</span></li>";
 
     }
 }

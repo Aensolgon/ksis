@@ -3,8 +3,8 @@ jQuery(function ($) {
     const firstDirrectory = "/file";
     let get_param = document.location.search.replace('?', '').split('=');
 
-    routing('url.php', {'current_dir': dir, 'operation': get_param[1]}, '#out');
     routing('breadcrumbs.php', {'current_dir': dir}, 'nav ol');
+    routing('url.php', {'current_dir': dir, 'operation': 'list'}, '#out');
 
 
     function routing(file_name, mass, out) {
@@ -16,13 +16,28 @@ jQuery(function ($) {
     }
 
     setTimeout(function () {
-        $('.pointer').dblclick(function () {
+        $('#out').on('dblclick', '.pointer', function () {
             if ($(this).attr('data-type') == 'folder') {
-                dir = firstDirrectory + '/' + $(this).attr('data-name');
+                dir += '/' + $(this).attr('data-name');
                 routing('breadcrumbs.php', {'current_dir': dir}, 'nav ol');
+                routing('url.php', {'current_dir': dir, 'operation': 'list'}, '#out');
 
             }
         })
     }, 500);
+
+    $('.breadcrumb').on('click', '.breadcrumb-item', function () {
+        dir = '';
+        let number = $(this).attr('data-number');
+        let name = $(this).attr('data-name');
+        $('.breadcrumb li').each(function (key, value) {
+            if (key < number) {
+                dir += '/' + $(this).attr('data-name');
+            }
+        });
+        routing('breadcrumbs.php', {'current_dir': dir}, 'nav ol');
+        routing('url.php', {'current_dir': dir, 'operation': 'list'}, '#out');
+    });
+
 
 });

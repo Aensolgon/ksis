@@ -4,7 +4,7 @@
 }
 
 #out {
-    height: 100vh;
+    height: 80vh;
     padding: 20px; /* поля 20px */
     overflow: auto; /* прокрутка */
 }
@@ -18,6 +18,9 @@
     background-color: #cefffd;
 }
 .pointer{
+    cursor: pointer;
+}
+.breadcrumb-item span{
     cursor: pointer;
 }
 a{

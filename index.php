@@ -41,7 +41,7 @@
         </div>
     </section>
 
-    <section id="out" class=" sec-2 col-12 p-0">
+    <section id="out" class="sec-2 col-12 p-0">
 
     </section>
 </section>
