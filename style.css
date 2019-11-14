@@ -52,13 +52,16 @@ display: none;
     position: relative;
     list-style: none;
 }
-#target ol li{
+#target ol li input{
+    border: 0;
+    background-color: #fff;
     margin: 0;
+    width: 100%;
     padding: 5%;
     border-bottom: 1px solid #b0b0b0;
     height: 100%;
 }
-#target ol li:hover{
+#target ol li input:hover{
     cursor: pointer;
     background-color: #dee2e6;
 }
@@ -83,6 +86,7 @@ display: none;
     background-color: #fff;
     border: 1px solid #b0b0b0;
 }
+
 .shine{
     background-color: #cefffd;
 }

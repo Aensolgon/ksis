@@ -4,6 +4,7 @@ $current_dir = __DIR__ . $_REQUEST['current_dir'];
 $fileName = $_REQUEST['filename'];
 $content = explode('=', $_REQUEST['content'])[1];
 $createFile = explode('=', $_REQUEST['file'])[1];
+$newFile = $_REQUEST['copyfile'];
 
 switch ($operation) {
     case 'list':
@@ -14,6 +15,10 @@ switch ($operation) {
         break;
     case 'create':
         createFile($current_dir, urldecode($createFile));
+        break;
+        case 'copy':
+            var_dump($_REQUEST);
+        copyFile($current_dir, $newFile);
         break;
 
     case 'delete':
@@ -76,6 +81,13 @@ function createFile($current_directory, $fileName){
         $file = fopen($current_directory . '/' . $fileName, 'w');
         fclose($file);
     }
+    echo 'success';
+}
+
+function copyFile($current_directory, $newFile){
+    var_dump($newFile);
+   /* $path = $current_directory.'/'.$newFile;
+        copy("/file", "$newFile");*/
     echo 'success';
 }
 function delete($current_directory, $fileName){

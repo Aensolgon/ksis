@@ -8,17 +8,17 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
 
     <title>File Manager</title>
 </head>
 <body>
 <div class="hide" id="target">
     <ol>
-        <li data-operation="create">Создать</li>
-        <li data-operation="copy">Копировать</li>
-        <li data-operation="move">Переместить</li>
-        <li data-operation="delete">Удалить</li>
+        <li data-operation="create"><input type="button" value="Создать"></li>
+        <li data-operation="copy"><input type="button" value="Копировать"></li>
+        <li class="disable" data-operation="move"><input disabled type="button" value="Вставить"></li>
+        <li data-operation="delete"><input type="button" value="Удалить"></li>
     </ol>
 </div>
 
@@ -54,28 +54,28 @@
 <script src="main.js"></script>
 <div class="modal fade bd-example-modal-lg" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel"></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <form method="post" id="ajax_form" action="">
-        <div class="modal-body">
-                <div class="form-group">
-                    <label for="message-text" class="col-form-label">Message:</label>
-                    <textarea class="form-control" name="message" id="message-text"></textarea>
-                </div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" id="ajax_form" action="">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Message:</label>
+                        <textarea class="form-control" name="message" id="message-text"></textarea>
+                    </div>
 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                    <button type="button" id="save" class="btn btn-primary">Сохранить</button>
+                </div>
+            </form>
         </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-            <button type="button" id="save" class="btn btn-primary">Сохранить</button>
-        </div>
-        </form>
     </div>
-</div>
 </div>
 
 <div class="modal fade bd-example-modal-lg" id="createFolder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

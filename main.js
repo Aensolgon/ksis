@@ -10,10 +10,11 @@ jQuery(function ($) {
         $.post(file_name, mass)
             .done(function (data) {
                 if (data == 'success') {
-                    $('#modal').modal('hide');
+                    alert(data);
+                   /* $('#modal').modal('hide');
                     routing('url.php', {'current_dir': dir, 'operation': 'list'}, '#out');
                     $('#createFolder').modal('hide');
-                    $('#nameFolder').val('');
+                    $('#nameFolder').val('');*/
 
                 } else {
                     $(out).html(data);
@@ -59,9 +60,9 @@ jQuery(function ($) {
                 var target = $(event.originalEvent);
                 if (target[0].path.length === 8) {
                     $(target[0].path[1]).addClass('shine');
-                    if (!!(nameFile)) {
+                  /*  if (!!(nameFile)) {
                         nameFile = null;
-                    }
+                    }*/
                     nameFile = target[0].path[1]['firstElementChild']['dataset']['name'];
                     $('#target ol li').on('click', function () {
                         let operation = $(this).attr('data-operation');
@@ -77,7 +78,20 @@ jQuery(function ($) {
                                     });
                                 });
                                 break;
-
+                            case 'copy':
+                          $('.disable input')[0]['disabled'] = false;
+                                routing('url.php', {
+                                'copyfile': nameFile,
+                                    'operation': 'copy'
+                            });
+                                break;
+                            case 'move':
+                                $('.disable input')[0]['disabled'] = true;
+                                routing('url.php', {
+                                    'current_dir': dir,
+                                    'operation': 'copy'
+                                });
+                                break;
                             case 'delete':
                                 routing('url.php', {
                                     'current_dir': dir,
