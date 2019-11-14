@@ -5,6 +5,9 @@ $fileName = $_REQUEST['filename'];
 $content = explode('=', $_REQUEST['content'])[1];
 $createFile = explode('=', $_REQUEST['file'])[1];
 $newFile = $_REQUEST['copyfile'];
+$old_path = $_REQUEST['old_path'];
+
+
 
 switch ($operation) {
     case 'list':
@@ -16,13 +19,18 @@ switch ($operation) {
     case 'create':
         createFile($current_dir, urldecode($createFile));
         break;
-        case 'copy':
-            var_dump($_REQUEST);
-        copyFile($current_dir, $newFile);
+    case 'download':
+        downloadFile($current_dir,  $_FILES['file']);
+        break;
+    case 'copy':
+        copyFile($current_dir, $old_path, $newFile);
+        break;
+    case 'cut':
+        cutFile($current_dir,$old_path,$newFile);
         break;
 
     case 'delete':
-        delete($current_dir,$fileName);
+        delete($current_dir, $fileName);
         break;
     case 'write':
         writeWord($current_dir, $fileName, urldecode($content));
@@ -60,6 +68,7 @@ function editWord($current_directory, $fileName)
     } else {
         echo htmlspecialchars($content, ENT_QUOTES);
     }
+
 }
 
 function writeWord($current_directory, $fileName, $content)
@@ -74,29 +83,47 @@ function createFolder($current_dirrectory, $dirName)
     echo 'success';
 }
 
-function createFile($current_directory, $fileName){
-    if(count(explode('.',$fileName)) <= 1){
+function createFile($current_directory, $fileName)
+{
+    if (count(explode('.', $fileName)) <= 1) {
         mkdir($current_directory . '/' . $fileName, '0700');
-    }else {
+    } else {
         $file = fopen($current_directory . '/' . $fileName, 'w');
         fclose($file);
     }
     echo 'success';
 }
 
-function copyFile($current_directory, $newFile){
-    var_dump($newFile);
-   /* $path = $current_directory.'/'.$newFile;
-        copy("/file", "$newFile");*/
+function downloadFile($current_directory, $download){
+    $path = $current_directory.'/'.$download['name'];
+    move_uploaded_file($download['tmp_name'], $path);
+}
+
+function copyFile($current_path, $old_path, $newFile)
+{
+    $old = __DIR__.$old_path.'/'.$newFile;
+    $new = $current_path.'/'.$newFile;
+         copy($old, $new);
     echo 'success';
 }
-function delete($current_directory, $fileName){
-    $path = $current_directory.'/'.$fileName;
-    if(is_dir($path)){
+
+function cutFile($current_path, $old_path, $newFile)
+{
+    $old = __DIR__.$old_path.'/'.$newFile;
+    $new = $current_path.'/'.$newFile;
+    move_uploaded_file($old, $new);
+    echo 'success';
+}
+
+function delete($current_directory, $fileName)
+{
+    $path = $current_directory . '/' . $fileName;
+    if (is_dir($path)) {
         rmdir($path);
-    }else{
+    } else {
         unlink($path);
     }
     echo 'success';
 }
+
 ?>

@@ -1,6 +1,7 @@
 jQuery(function ($) {
     let dir = "/file";
     const firstDirrectory = "/file";
+    let old_path;
 
     routing('breadcrumbs.php', {'current_dir': dir}, 'nav ol');
     routing('url.php', {'current_dir': dir, 'operation': 'list'}, '#out');
@@ -10,11 +11,10 @@ jQuery(function ($) {
         $.post(file_name, mass)
             .done(function (data) {
                 if (data == 'success') {
-                    alert(data);
-                   /* $('#modal').modal('hide');
+                    $('#modal').modal('hide');
                     routing('url.php', {'current_dir': dir, 'operation': 'list'}, '#out');
                     $('#createFolder').modal('hide');
-                    $('#nameFolder').val('');*/
+                    $('#nameFolder').val('');
 
                 } else {
                     $(out).html(data);
@@ -60,9 +60,9 @@ jQuery(function ($) {
                 var target = $(event.originalEvent);
                 if (target[0].path.length === 8) {
                     $(target[0].path[1]).addClass('shine');
-                  /*  if (!!(nameFile)) {
-                        nameFile = null;
-                    }*/
+                    /*  if (!!(nameFile)) {
+                          nameFile = null;
+                      }*/
                     nameFile = target[0].path[1]['firstElementChild']['dataset']['name'];
                     $('#target ol li').on('click', function () {
                         let operation = $(this).attr('data-operation');
@@ -78,19 +78,23 @@ jQuery(function ($) {
                                     });
                                 });
                                 break;
+
                             case 'copy':
-                          $('.disable input')[0]['disabled'] = false;
-                                routing('url.php', {
-                                'copyfile': nameFile,
-                                    'operation': 'copy'
-                            });
+                                $('.disable input')[0]['disabled'] = false;
+                                old_path = dir;
                                 break;
                             case 'move':
                                 $('.disable input')[0]['disabled'] = true;
                                 routing('url.php', {
+                                    'old_path': old_path,
+                                    'copyfile': nameFile,
                                     'current_dir': dir,
                                     'operation': 'copy'
                                 });
+                                break;
+                            case 'cut':
+                                $('.disable input')[0]['disabled'] = false;
+                                old_path = dir;
                                 break;
                             case 'delete':
                                 routing('url.php', {
@@ -117,6 +121,7 @@ jQuery(function ($) {
                                     });
                                 });
                                 break;
+
                         }
                     });
                 }
@@ -127,7 +132,29 @@ jQuery(function ($) {
             }
         });
     });
-
+    $('#file').change(function () {
+        let formData = new FormData();
+        let file = $('#file')[0].files[0];
+        formData.append("file", file);
+        formData.append("operation", 'download');
+        formData.append("current_dir", dir);
+        console.log(file);
+        $.ajax({
+            url: 'url.php',
+            data: formData,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            success: function (data) {
+                routing('url.php', {'current_dir': dir, 'operation': 'list'}, '#out');
+                $('#file').val('');
+            }
+        });
+        /* routing('url.php', {
+        'file': file,
+             'operation': 'download'
+         });*/
+    });
     setTimeout(function () {
         $('#out').on('dblclick', '.pointer', function () {
             let element = $(this).attr('data-type');

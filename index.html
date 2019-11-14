@@ -16,8 +16,13 @@
 <div class="hide" id="target">
     <ol>
         <li data-operation="create"><input type="button" value="Создать"></li>
+        <li data-operation="download">
+            <input type="file" name="file" id="file" class="inputfile">
+            <label for="file">Загрузить</label>
+        </li>
         <li data-operation="copy"><input type="button" value="Копировать"></li>
         <li class="disable" data-operation="move"><input disabled type="button" value="Вставить"></li>
+        <li data-operation="cut"><input type="button" value="Вырезать"></li>
         <li data-operation="delete"><input type="button" value="Удалить"></li>
     </ol>
 </div>
