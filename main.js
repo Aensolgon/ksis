@@ -1,7 +1,6 @@
 jQuery(function ($) {
     let dir = "/file";
     const firstDirrectory = "/file";
-    let get_param = document.location.search.replace('?', '').split('=');
 
     routing('breadcrumbs.php', {'current_dir': dir}, 'nav ol');
     routing('url.php', {'current_dir': dir, 'operation': 'list'}, '#out');
@@ -10,14 +9,110 @@ jQuery(function ($) {
     function routing(file_name, mass, out) {
         $.post(file_name, mass)
             .done(function (data) {
-                if(data == 'success'){
+                if (data == 'success') {
                     $('#modal').modal('hide');
-                }else {
+                    routing('url.php', {'current_dir': dir, 'operation': 'list'}, '#out');
+                    $('#createFolder').modal('hide');
+                    $('#nameFolder').val('');
+
+                } else {
                     $(out).html(data);
                 }
             });
 
     }
+
+    $(document).on('click', function () {
+        $('body').each(function () {
+            if ($(this).hasClass('shine')) {
+                $(this).removeClass('shine');
+            }
+        });
+        $('body section').each(function () {
+            if ($(this).hasClass('shine')) {
+                $(this).removeClass('shine');
+            }
+        });
+        $('#target').addClass('hide');
+        $('.inner').each(function () {
+            if ($(this).hasClass('shine')) {
+                $(this).removeClass('shine');
+            }
+        });
+        $('.pointer').each(function () {
+            if ($(this).hasClass('shine')) {
+                $(this).removeClass('shine');
+            }
+        })
+    });
+    document.oncontextmenu = function () {
+        return false;
+    };
+    $(document).ready(function () {
+        let nameFile = null;
+        $('#out').mousedown(function (event) {
+
+            $('*').removeClass('shine');
+
+            if (event.which === 3) {
+
+                var target = $(event.originalEvent);
+                if (target[0].path.length === 8) {
+                    $(target[0].path[1]).addClass('shine');
+                    if (!!(nameFile)) {
+                        nameFile = null;
+                    }
+                    nameFile = target[0].path[1]['firstElementChild']['dataset']['name'];
+                    $('#target ol li').on('click', function () {
+                        let operation = $(this).attr('data-operation');
+                        switch (operation) {
+                            case 'create':
+                                $('#createFolder').modal('show');
+                                $('#saveFolder').on('click', function (e) {
+                                    let createFile = $('#ajax_form_folder').serialize();
+                                    routing('url.php', {
+                                        'current_dir': dir,
+                                        'operation': 'create',
+                                        'file': createFile
+                                    });
+                                });
+                                break;
+
+                            case 'delete':
+                                routing('url.php', {
+                                    'current_dir': dir,
+                                    'operation': 'delete',
+                                    'filename': nameFile
+                                });
+                                break;
+                        }
+
+                    });
+                } else {
+                    $('#target ol li').on('click', function () {
+                        let operation = $(this).attr('data-operation');
+                        switch (operation) {
+                            case 'create':
+                                $('#createFolder').modal('show');
+                                $('#saveFolder').on('click', function (e) {
+                                    let createFile = $('#ajax_form_folder').serialize();
+                                    routing('url.php', {
+                                        'current_dir': dir,
+                                        'operation': 'create',
+                                        'file': createFile
+                                    });
+                                });
+                                break;
+                        }
+                    });
+                }
+
+                // Создаем меню:
+                $('#target').removeClass('hide');
+                $('#target').css({'top': event.pageY, 'left': event.pageX});
+            }
+        });
+    });
 
     setTimeout(function () {
         $('#out').on('dblclick', '.pointer', function () {
@@ -27,7 +122,6 @@ jQuery(function ($) {
                 case 'folder':
                     openFolder(data_name);
                     break;
-
                 case 'txt':
                     openWord(data_name);
                     break;
@@ -42,11 +136,11 @@ jQuery(function ($) {
         })
     }, 500);
 
-    $('#save').on('click',function(e){
+    $('#save').on('click', function (e) {
         e.preventDefault();
         let modal_name = $('#exampleModalLabel').text();
         let content = $("#ajax_form").serialize();
-        routing('url.php',{'current_dir': dir, 'operation': 'write','filename': modal_name,'content': content});
+        routing('url.php', {'current_dir': dir, 'operation': 'write', 'filename': modal_name, 'content': content});
     });
 
     $('.breadcrumb').on('click', '.breadcrumb-item', function () {
@@ -67,8 +161,9 @@ jQuery(function ($) {
         routing('breadcrumbs.php', {'current_dir': dir}, 'nav ol');
         routing('url.php', {'current_dir': dir, 'operation': 'list'}, '#out');
     }
-    $('#out .col-12').on('click',function(){
-       $(this).toggle('.click');
+
+    $('#out .col-12').on('click', function () {
+        $(this).toggle('.click');
     });
 
     function openWord(name) {
@@ -78,6 +173,6 @@ jQuery(function ($) {
     }
 
 
-
-});
+})
+;
 
